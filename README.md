@@ -16,6 +16,8 @@ brew tap atomsprout/tap
 brew install --cask atomsprout/tap/locus
 ```
 
+如新版 Homebrew 提示 `untrusted tap`，运行 `brew trust --cask atomsprout/tap/locus`，然后重试安装或升级。
+
 手动下载：[Locus 0.1.0 (31)](https://github.com/atomsprout/locus-release/releases/tag/v0.1.0-31)。
 
 Homebrew 仅安装应用，不会自动启用网络扩展。打开 `/Applications/Locus.app`，保持默认 **Direct**，点击 **Start**，按 macOS 提示允许网络扩展和代理配置。重启后需要再次手动 Start。
