@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "locus": {
+      "command": "/Applications/Locus.app/Contents/Helpers/locus-mcp",
+      "args": []
+    }
+  }
+}

@@ -1,0 +1,37 @@
+Locus 0.1.0 (30) 公开预览版说明
+
+Locus 是面向用户和 Agent 的 macOS 规则代理与连接记录工具。
+本版为首个公开预览版；已完成隔离虚拟机验收，实体 Mac 验收仍待完成。
+支持 Apple silicon，要求 macOS 27.0 或更新版本。
+
+可以用它做什么
+- 用应用签名标识和域名规则，在 Direct、Block 和代理节点之间分流。
+- 配置 SOCKS5、HTTP CONNECT、Trojan，以及两种 Shadowsocks AEAD 方案。
+- 查看应用、目标、路由、状态和错误，搜索保留记录并导出 JSON。
+- 通过本地九工具 MCP，让已有 Agent 按应用观察、查询和解释连接证据。
+  需要用户自己的 MCP 客户端与模型，Locus 不内置模型或云端分析服务。
+
+本次完善
+- 首次系统扩展审批使用原生对话框和状态说明，避免残留的重复审批弹窗。
+- 移除后明确区分已停用和仍可能等待重启的系统清理。
+- 针对应用的搜索和路由解释要求明确应用参数；全局/未知身份使用独立工具。
+- 精确诊断区分当前规则预测与历史结果，保留近期预览之外的失败证据。
+
+开始试用前请阅读 START-HERE.zh-CN.txt。先用默认 Direct，手动 Start，
+再在目标应用发起请求。重启后需要再次手动 Start。停用请点击 Stop，
+退出窗口或应用不会自动停止已经运行的网络扩展。
+
+这是连接元数据工具，不包含 HTTPS 正文解密、HTTP 重放或 E7 脚本。
+bypassed 表示规则放行，不能证明请求成功。Agent 的推断仍需核对记录 ID；
+一次模型案例核心事实正确不等于通用分析准确性保证。
+完整范围和限制见 SUPPORTED-FEATURES.zh-CN.txt、KNOWN-ISSUES.zh-CN.txt。
+
+验收范围
+实际虚拟机已验证本版首次安装/原生审批、权限拒绝及授权、真实 HTTPS/MCP
+抓取链路、系统移除与重启清理，以及已有版本升级后的完整历史字典保留。
+历史五协议矩阵与自然 DHCP 续租结果保留各自原构建范围。
+这不代表所有实体网络、服务端配置或第三方模型均已验证。
+
+使用 TEST-CHECKLIST.zh-CN.txt 记录环境和复现步骤。反馈前请去除订阅令牌、
+代理密码、API 密钥和不必要的连接历史。下载：https://github.com/atomsprout/locus-release/releases
+反馈：https://github.com/atomsprout/locus-release/issues

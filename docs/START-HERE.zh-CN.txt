@@ -1,0 +1,91 @@
+Locus 0.1.0 (30) 公开预览版
+
+面向用户和 Agent 的 macOS 规则代理、按应用分流与连接记录工具。
+这是首个公开预览版，已完成隔离虚拟机验收，实体 Mac 验收尚未完成。
+仅支持 Apple silicon，最低 macOS 27.0。
+
+一、安装和首次启动
+1. 推荐使用 Homebrew 安装：brew install --cask atomsprout/tap/locus。
+   或从本仓库 Releases 下载 Locus-0.1.0-30.zip 并解压。
+2. 在 Finder 中把 Locus.app 拖入 Applications，再从 Applications 打开。
+   不要直接从 Downloads 运行；不要删除或修改系统扩展文件。
+3. 先保持 Rules 的默认路由为 Direct，点击 Start。
+4. 按系统提示启用 Locus 网络扩展。需要时进入 System Settings 的
+   Network Extensions 开启 Locus，并完成系统管理员确认。
+5. 允许 macOS 的代理配置请求。等待顶部显示 Connected · capture active。
+   只有 Connected 或仍在同步时，不足以确认连接记录已准备好。
+6. 在其他应用发起请求，回到 Connections 查看、搜索或导出记录。
+
+重启后手动打开 Locus 并点击 Start。退出窗口或应用不会自动停止已运行
+的扩展；停止抓取和代理请点击 Stop，等待 Not running。
+
+二、代理和分流
+Proxies 可添加节点、粘贴代理链接，或单次导入 HTTPS 订阅。
+支持 SOCKS5、HTTP CONNECT、Trojan，以及 Shadowsocks 的
+AES-256-GCM / ChaCha20-IETF-Poly1305。选择 Use as Default 使用默认代理。
+也可保持默认 Direct，在 Rules 通过 Choose App 为某个应用添加 Proxy 规则。
+规则从上到下匹配，第一条命中生效；开关只影响新连接。
+各协议的 UDP / DNS 限制见 SUPPORTED-FEATURES.zh-CN.txt。
+
+三、接入 Agent
+Locus 提供本地 stdio MCP 工具，需要已有支持 MCP 的 Agent 客户端和模型。
+不内置模型或 API 密钥。本目录的 MCP.example.json 是配置示例；不同客户端
+可能需要在自己的扩展界面添加。也可在 Agent Access 复制 Server JSON。
+helper 的路径是 /Applications/Locus.app/Contents/Helpers/locus-mcp，
+这是可执行文件路径，不是 HTTP 地址。
+
+可以对 Agent 说：
+“先检查 Locus 抓取状态，找到 Safari，观察十秒。我会在 Safari 中打开网页。
+然后解释访问了哪些目标、走了什么规则，区分实际记录和无法确认的内容。”
+
+先检查 locus_capture_status，再用 locus_list_running_apps 查找应用，
+调用 locus_capture_app 抓取。抓取期间需要在目标应用中实际触发请求。
+未启动时会请求用户在 Locus 中确认；不会绕过系统扩展授权。
+实时抓取时保持 Locus 应用运行，以便同步扩展记录。
+
+如出现 Operation not permitted，先尝试一次工具调用，再在
+System Settings → Privacy & Security → Files & Folders 中找到实际的
+Agent 客户端，开启 Data shared by Locus and affiliated apps。
+授权对象是该客户端，例如 Goose 或 Terminal。无需开启 Full Disk Access。
+
+针对已知连接，优先调用 locus_diagnose_connection，必须提供 app_id、host、
+port、transport；它区分当前预测和完整保留历史中的失败/阻断证据。
+当前提供九个工具。locus_list_connections 必须提供 app_id；明确跨应用
+查询使用 locus_list_all_connections。locus_explain_route 必须提供 host 与
+app_id；确实未知身份时使用 locus_explain_unknown_route。UDP 必须明确端口。
+不再接受 all_apps / app_identity_unknown 输入标记，升级后刷新工具列表。
+其他连接查询默认最多返回 20 条。针对某个连接，应提供应用、目标、端口和协议。
+若 truncated 为 true，用 nextBeforeEventID 作为 before_event_id 并保持原筛选
+继续查询；游标过期会明确报错，不能将单页当成全部历史。
+
+本次抓取返回的 summary 对应该次返回记录。后续复算应将这些记录的 ID
+作为 event_ids 传给 locus_summarize_connections；seconds 是查询执行时的
+滚动窗口，不能替代先前的观察窗口。未知字节数不等于零。
+
+四、看懂记录和错误
+目前只有连接元数据，没有 HTTPS 请求/响应正文，不进行 HTTPS 解密。
+Direct 的 bypassed 表示规则放行，不表示没有传输数据；其字节数和耗时
+通常未测量。刚失败时列表可能还没同步，等待约两秒再查。
+结果为空、心跳过期或同步不完整时，不能断言应用没有发起请求。
+检查 mayHaveMissedRecords、recordSynchronizationUnverified 和错误提示。
+更多限制和未决问题见 KNOWN-ISSUES.zh-CN.txt。
+
+代理不通时先点 Stop 确认直连是否恢复，再检查节点地址、端口、凭据和规则。
+收到“连接被重置”不能单凭该错误断定密码错误；服务端可能直接关闭连接。
+
+五、停用、卸载与记录
+点击 Stop 停止。要移除网络集成，进入 Settings → Remove network integration，
+确认系统停用扩展；系统可能要求管理员确认或重启。deactivated 表示已停用；
+若 macOS 等待重启完成卸载，请重启后再确认。
+完成后退出 Locus，在 Finder 对 Applications 中的应用右键选择 Move to Trash。
+不要手工删除 /Library/SystemExtensions。
+移除网络集成保留代理配置、Keychain 凭据和连接历史。
+删除记录使用 Connections → Clear Records。停止状态下会先清空用户镜像，
+下次 Start 再清空扩展历史。删除代理会同步处理其保存的认证信息。
+
+六、包校验与反馈
+应用 ZIP 的 SHA-256：
+33ab70e76d51d0f935071cc7666588ff9e6973864670b2370e029edcdc4fa41a
+Releases 的 SHA256SUMS 列出交付文件校验值；下载应用与校验文件后可校验。
+首次体验验收和反馈模板见 TEST-CHECKLIST.zh-CN.txt。
+反馈时保留版本、发生时间、操作和错误；不要附代理密码、订阅令牌或 API 密钥。
