@@ -1,12 +1,12 @@
-Locus 0.1.0 (30) 公开预览版
+Locus 0.1.0 (31) 公开预览版
 
 面向用户和 Agent 的 macOS 规则代理、按应用分流与连接记录工具。
-这是首个公开预览版，已完成隔离虚拟机验收，实体 Mac 验收尚未完成。
-仅支持 Apple silicon，最低 macOS 27.0。
+这是公开预览版。此前主要流程在 macOS 27 虚拟机验证；macOS 26 实际运行和实体 Mac 验收尚未完成。
+仅支持 Apple silicon，最低 macOS 26.0。
 
 一、安装和首次启动
 1. 推荐使用 Homebrew 安装：brew install --cask atomsprout/tap/locus。
-   或从本仓库 Releases 下载 Locus-0.1.0-30.zip 并解压。
+   或从本仓库 Releases 下载 Locus-0.1.0-31.zip 并解压。
 2. 在 Finder 中把 Locus.app 拖入 Applications，再从 Applications 打开。
    不要直接从 Downloads 运行；不要删除或修改系统扩展文件。
 3. 先保持 Rules 的默认路由为 Direct，点击 Start。
