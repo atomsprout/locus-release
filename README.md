@@ -2,7 +2,9 @@
 
 面向用户与 Agent 的 macOS 规则代理、按应用分流和连接记录工具。
 
-**公开预览版：0.1.0 (31)**。要求 **Apple silicon / macOS 26 或更新版本**。
+**公开预览版：0.1.0 (33)**。要求 **Apple silicon / macOS 26 或更新版本**。
+
+第 33 版更新原生界面：醒目的 Start/Stop Capture、独立状态面板、分组导航、搜索筛选栏、路由/状态标识及可关闭的连接详情。网络路由与 MCP 接口保持不变。
 
 本仓库只提供发行包、使用说明和反馈入口，不包含应用源码。当前版本已签名、公证，最低部署版本为 macOS 26。此前 macOS 27 虚拟机完成了安装、授权、真实抓取、升级、重启与卸载验收；这些历史结果不代表 macOS 26 已通过运行验收。实体 Mac 反馈和验收尚未完成；历史协议及模型测试保留各自的构建范围。
 
@@ -18,7 +20,7 @@ brew install --cask atomsprout/tap/locus
 
 如新版 Homebrew 提示 `untrusted tap`，运行 `brew trust --cask atomsprout/tap/locus`，然后重试安装或升级。
 
-手动下载：[Locus 0.1.0 (31)](https://github.com/atomsprout/locus-release/releases/tag/v0.1.0-31)。
+手动下载：[Locus 0.1.0 (33)](https://github.com/atomsprout/locus-release/releases/tag/v0.1.0-33)。
 
 Homebrew 仅安装应用，不会自动启用网络扩展。打开 `/Applications/Locus.app`，保持默认 **Direct**，点击 **Start**，按 macOS 提示允许网络扩展和代理配置。重启后需要再次手动 Start。
 
