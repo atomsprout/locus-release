@@ -1,4 +1,4 @@
-Locus 0.1.0 (36) 公开预览版
+Locus 0.2.0 (40) 公开预览版
 
 面向用户和 Agent 的 macOS 规则代理、按应用分流与连接记录工具。
 这是公开预览版。此前主要流程在 macOS 27 虚拟机验证；macOS 26 实际运行和实体 Mac 验收尚未完成。
@@ -6,7 +6,7 @@ Locus 0.1.0 (36) 公开预览版
 
 一、安装和首次启动
 1. 推荐使用 Homebrew 安装：brew install --cask atomsprout/tap/locus。
-   或从本仓库 Releases 下载 Locus-0.1.0-36.zip 并解压。
+   或从本仓库 Releases 下载 Locus-0.2.0-40.zip 并解压。
 2. 在 Finder 中把 Locus.app 拖入 Applications，再从 Applications 打开。
    不要直接从 Downloads 运行；不要删除或修改系统扩展文件。
 3. 先保持 Rules 的默认路由为 Direct，点击 Start。
@@ -50,7 +50,7 @@ Agent 客户端，开启 Data shared by Locus and affiliated apps。
 
 针对已知连接，优先调用 locus_diagnose_connection，必须提供 app_id、host、
 port、transport；它区分当前预测和完整保留历史中的失败/阻断证据。
-当前提供九个工具。locus_list_connections 必须提供 app_id；明确跨应用
+当前提供 23 个工具。locus_list_connections 必须提供 app_id；明确跨应用
 查询使用 locus_list_all_connections。locus_explain_route 必须提供 host 与
 app_id；确实未知身份时使用 locus_explain_unknown_route。UDP 必须明确端口。
 不再接受 all_apps / app_identity_unknown 输入标记，升级后刷新工具列表。
@@ -89,3 +89,16 @@ Direct 的 bypassed 表示规则放行，不表示没有传输数据；其字节
 Releases 的 SHA256SUMS 列出交付文件校验值；下载应用与校验文件后可校验。
 首次体验验收和反馈模板见 TEST-CHECKLIST.zh-CN.txt。
 反馈时保留版本、发生时间、操作和错误；不要附代理密码、订阅令牌或 API 密钥。
+
+五、0.2 诊断工作台
+Sessions → 选择应用 → Start session → 重现问题 → Finish → 等到 Completed。
+可对比两次同应用的已完成观察、导出脱敏报告，或执行 Capture self-check。
+保持 Locus 界面运行；结果为空不能推断没有流量。清空 Connections 不删除 Sessions。
+
+Agent 推荐 locus_start_session 后轮询 locus_get_session，结束调用 locus_finish_session，
+若 state=finishing 则继续轮询直到 completed。用 locus_session_events 分页读取保存证据，
+locus_compare_sessions 对比同应用窗口。locus_test_proxy 返回 job_id 后轮询 locus_get_proxy_test。
+临时规则提案只创建待审核项，必须在 Rules 看到准确范围并批准才改变路由。
+
+升级到 0.2 后首次写入旧配置前，会保留 configuration.pre-0.2.json 供手动恢复。
+仅在明确需要降级时，先 Stop 并退出应用，再手动备份和恢复配置；不会自动恢复或自动 Start。
