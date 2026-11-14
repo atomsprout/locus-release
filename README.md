@@ -2,9 +2,11 @@
 
 面向用户和 Agent 的 macOS 网络诊断工作台：规则代理、按应用分流、可保存和核对的连接证据。
 
-**公开预览版：0.2.0 (40)**。要求 **Apple silicon / macOS 26 或更新版本**。
+**公开预览版：0.2.1 (42)**。要求 **Apple silicon / macOS 26 或更新版本**。
 
 0.2 新增保存诊断会话、两次会话对比、抓取自检、规则试算与应用前预览、真实节点测试、手动代理组、托管订阅刷新预览，以及需要用户批准的 Agent 临时规则。共 23 个本地 MCP 工具，配合你已有的 Agent 客户端使用。
+
+0.2.1 修复大体积会话保存、满额后会话可见性和原生菜单期间的记录同步。补充完成 120 项核心测试、10 组 MCP 集成测试及 67 项网络检查；具体构建范围见[发行说明](docs/RELEASE-NOTES.zh-CN.txt)。
 
 ## 安装或升级
 
@@ -24,7 +26,7 @@ brew install --cask atomsprout/tap/locus
 
 如 Homebrew 提示 `untrusted tap`，先运行 `brew trust --cask atomsprout/tap/locus`，再重试。
 
-手动下载：[Locus 0.2.0 (40)](https://github.com/atomsprout/locus-release/releases/tag/v0.2.0-40)。打开 `/Applications/Locus.app`，保持默认 Direct，手动点击 Start，完成 macOS 网络扩展和代理配置授权。安装不会自动启用网络；重启后也需要手动 Start。
+手动下载：[Locus 0.2.1 (42)](https://github.com/atomsprout/locus-release/releases/tag/v0.2.1-42)。打开 `/Applications/Locus.app`，保持默认 Direct，手动点击 Start，完成 macOS 网络扩展和代理配置授权。安装不会自动启用网络；重启后也需要手动 Start。
 
 ## 0.2 可以做什么
 
