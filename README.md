@@ -60,7 +60,7 @@ Global 是符合范围流量的代理模式；仍遵守系统排除和本地网�
 
 当前没有 HTTP 重放/改写、E7、自动故障切换或新 VPN 隧道协议。QUIC/HTTP3、gRPC、WebSocket 帧和 loopback 抓取不在本版范围内。`bypassed` / `closed` 不证明 HTTP 请求成功，Agent 结论必须核对证据。参见[已知限制](docs/KNOWN-ISSUES.zh-CN.txt)。
 
-发行包已签名、公证，实际验收来自隔离 macOS 27.2.1 访客。**macOS 26 实际运行、另一台实体 Mac 和完整长期压力测试仍未完成。** 历史测试保留各自实际构建范围，详见[发行说明](docs/RELEASE-NOTES.zh-CN.txt)。
+发行包已签名、公证。除原 macOS 27.2.1 验收外，2026-11-14 已在全新 ChatComputer **macOS 26.6.2 (25G83)** 虚拟机验证同一公开版本的核心功能，见[macOS 26 实测补充](docs/MACOS26-ACCEPTANCE.zh-CN.txt)。**macOS 26.0 本身、另一台实体 Mac 和完整长期压力测试仍未完成。** 历史测试保留各自实际构建范围，详见[发行说明](docs/RELEASE-NOTES.zh-CN.txt)。
 
 卸载前：先 Disconnect；如果曾信任 Locus CA，进入 Requests → HTTPS certificate settings → Remove trust 完成移除，再到 Settings → Remove network integration。完成系统提示或重启后执行 `brew uninstall --cask atomsprout/tap/locus`。退出应用本身不会停止已运行的系统代理。
 

@@ -1,3 +1,5 @@
+2026-11-14 补充：同一公开 0.4.0 (59) 已通过 macOS 26.6.2 核心实测，详见 MACOS26-ACCEPTANCE.zh-CN.txt。26.0 和实体机仍未验证。以下保持原发布时的记录。
+
 Locus 0.4.0 (59) — 日常代理与 Agent 抓包工作区
 
 新增总览：Connect/Disconnect、Direct / Rules / Global Proxy、节点或手动组，

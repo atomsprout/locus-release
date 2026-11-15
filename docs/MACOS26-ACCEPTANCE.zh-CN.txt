@@ -1,0 +1,21 @@
+Locus 0.4.0 (59) — macOS 26 实测补充（2026-11-14）
+
+实际系统：Apple silicon / ChatComputer 虚拟机，macOS 26.6.2 (25G83)，4 CPU、8 GiB 内存。
+测试的是原公开 ZIP，SHA-256：
+2a857bdee364eae1e47e258560070a4f7ace35f70264bdc5289b16c7849aa792
+本次没有修改发行包、公证、Homebrew 版本/校验值或原测试包。
+
+通过项目：
+• 全新安装、严格签名验证、Gatekeeper 检查及原生界面启动。
+• 在访客系统设置中授权并启动 Network Extension 和代理配置。
+• Rules 默认 Direct，及 Global 的 SOCKS5、HTTP CONNECT、Shadowsocks AES-256-GCM / ChaCha20-IETF-Poly1305 四条实际代理路径。
+• 原生 HTTPS POST 随机值回传、MCP 连接记录及实际所选节点核对；独立代理端日志确认对应协议和目标连接。
+• 仅批准 curl / httpbingo.org / TCP 443 的十分钟 HTTPS 抓包；使用 curl --cacert 单客户端信任，未添加系统 CA 信任。
+• JSON 请求与返回、敏感字段脱敏、4 条增量 SSE、请求与连接 flow ID 关联。
+• Agent 结束抓包后 Global 路由继续；分析期正文可读；界面撤销后 MCP 拒绝正文读取。
+• 连接中的真实关机再开机：新内核启动、配置完整保留、不自动恢复、普通 HTTPS 200；手动 Connect 后 SOCKS5 再次通过。
+• 两条 HTTP 证据跨冷启动保留，28 个 MCP 工具可用。最终停止抓包、移除四个测试节点、删除临时抓包工作密钥、停止独立代理并正常关机。
+
+测试过程遇到并处理了 ChatComputer 账户页自动设置卡住、重启后虚拟网桥地址变化、VirtioFS 日志读取/输入文件缓存问题；这些环境问题没有计作产品通过。服务器日志在宿主独立核验，不能看到 TLS 内部的随机值；随机值由访客源站响应核对。宿主机未启用 Locus 网络扩展、代理、路由修改或 CA 信任；原 macOS 27 虚拟机保留。
+
+范围：此结果针对 26.6.2，不能代表所有 26.x 版本。macOS 26.0 本身和独立实体 Mac 仍未验证。本轮没有重跑 Trojan、完整 UDP/DNS/DHCP、订阅刷新、所有菜单/测速、睡眠唤醒、长期压力和外部模型推理矩阵，也不是 macOS 26 系统钥匙串 CA 信任/撤销验收。此前测试保留各自系统与构建范围，不代表完整 VPN/防泄漏保证。
