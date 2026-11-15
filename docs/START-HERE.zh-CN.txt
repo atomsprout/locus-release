@@ -1,14 +1,14 @@
-Locus 0.4.0 (59) 公开预览版
+Locus 0.5.0 (63) 公开预览版
 
-Apple silicon / macOS 26.0+。实际验收主要来自隔离 macOS 27.2.1 访客；
-macOS 26 实际运行、另一台实体 Mac 和完整长期稳定性仍待验证。
+Apple silicon / macOS 26.0+。同一最终63已实测 macOS 26.6.2 与27.2.1访客；
+26.0本身、实体Mac和完整长期稳定性仍待验证。见ACCEPTANCE-0.5.zh-CN.txt。
 Locus 同时提供日常代理和面向用户/Agent 的抓包；普通代理不需要解密 CA。
 
 一、安装与连接
 brew tap atomsprout/tap
 brew install --cask atomsprout/tap/locus
 
-也可下载 Locus-0.4.0-59.zip，在 Finder 解压后拖入 Applications。
+也可下载 Locus-0.5.0-63.zip，在 Finder 解压后拖入 Applications。
 从 /Applications/Locus.app 打开。Homebrew 不会替你启用网络扩展。
 初次保持 Rules 模式、规则默认 Direct，再点 Connect，完成 macOS 网络扩展
 和代理配置批准。等待 Connected；总览的 Applied to new connections 表示
@@ -59,7 +59,7 @@ HTTP 抓取遵守当前路由模式与所选出口，失败不会静默回退 Di
 在 Agent Access 复制 MCP 配置。可执行文件为：
 /Applications/Locus.app/Contents/Helpers/locus-mcp
 这是本地 stdio 服务，不是 HTTP 地址；不内置模型、云端分析或模型 API 密钥。
-共有 28 个工具。先 locus_capture_status，再查准确应用并申请观察/抓取窗口。
+共有 34 个工具。先 locus_capture_status，再查准确应用并申请观察/抓取窗口。
 network.modeAppliedToNewFlows 是配置确认；同时检查心跳、记录同步和缺失标记。
 未同步或空结果不能解释为应用没有请求；closed / bypassed 不证明 HTTP 成功。
 连接诊断提供 app_id、host、port、transport。连接列表默认有界，继续查询应保持
