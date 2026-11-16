@@ -1,22 +1,31 @@
-Locus 0.5.0 (63) — Agent 抓包诊断闭环
+Locus 0.6.0 (68) — Header 改写与稳定性补验
 
-新增 Requests 工作流：
-1. 应用发现：按名称、图标、签名ID选择实际联网应用；仅按真实包路径关联运行中的嵌入辅助应用，未知归属不猜测。最近主机只供审阅。
-2. Check preparation：扩展心跳、记录同步、准确配置确认、证书准备、审批范围及预判阻断。只读检查，不自动 Connect、安装信任或批准正文。
-3. Investigate & share：HTTP/传输错误、状态码、未完成/截断、耗时中位数/p95、失败和慢请求、准确请求/连接ID。空结果不代表没有流量。
-4. HTTP 会话对比：同一准确应用、已结束、按时间先后且不重叠的两次 Sessions；显示计数、耗时与窗口/配置差异，不自动宣称修复成功。
-5. AI/流式信息：只展示保留JSON/SSE中的模型、接口报告的token用量、数据帧数和实测首个响应字节时间；不估算token，不把首字节当首个模型token。
-6. 分享：默认不包含正文、目标地址、URL、路由名称和头部，保留应用、时间及证据ID；可显式包含脱敏样本，先预览再通过原生对话框保存JSON。超过128KiB预览需先缩小到会话。
+新增 Header 改写：Requests → Header rewrites。
+• 请求和响应 Header 均可 Set（替换全部值）、Add（追加一项）、Remove（删除全部值）。
+• 精确匹配应用签名 ID、主机、TCP 端口、编码后的路径前缀，以及可选 HTTP 方法。
+• 最多 32 条规则，按列表顺序执行。值保存在本机 Keychain；启动时通过匿名管道
+  交给引擎，不写入运行配置文件。改写记录保留规则 ID 和脱敏前后值数量。
+• 保存规则不改变流量。每次抓包确认默认关闭改写；明确勾选后，只对本次范围
+  生效。结束、停止、到期或引擎退出会停止改写。修改规则需先结束抓包，再开始新会话。
+• 禁止改写 Host、报文长度/分块、连接、编码、内部代理认证和 HTTP/2 伪头等字段。
+  本版不修改 URL、方法、正文或目的地。HTTPS 仍需客户端信任本地 CA。
+• 修复结束抓包时状态先于扩展撤销确认的问题；停止中不允许启动新抓包，
+  未确认撤销时明确提示，不提前宣称完成。
+• 启动配置通过后台管道写入，断开的子进程不会用 SIGPIPE 终止 GUI；
+  启动有超时和取消检查。结束后的部分记录准确显示 Incomplete。
+• 修复新增选项导致小屏确认按钮被遮挡的问题：表单可滚动，底部按钮固定可见。
 
-MCP 共34工具，新增6个只读工具：
-locus_discover_inspection_apps / locus_prepare_http_inspection / locus_diagnose_http /
-locus_compare_http_sessions / locus_get_ai_request_evidence / locus_export_http_diagnosis
-AI字段读取与普通正文读取使用同一个独立、限时、准确范围的批准；撤销后均拒绝。
-MCP导出只返回元数据JSON，不写文件、也不返回正文。捕获文本始终是不可信数据。
+Agent：36 个本地 MCP 工具，新增：
+locus_list_header_rewrites、locus_propose_header_rewrite。
+Agent 只提出匹配规则，不接收或提供替换值。用户在 GUI 审核、填写 Set/Add 的值，
+保存后，还需在抓包确认中明确启用。提案不会直接改流量。
 
-保留0.4的 Direct / Rules / Global、节点/手动组、节点检查、托管订阅和菜单栏。
-普通代理不需要解密CA；重启后手动Connect，不自动恢复。Locus不提供节点服务。
-E7、重放/mock/改写、新VPN协议、自动故障切换和内置AI仍未提供。
+沿用 0.5：应用发现、准备检查、JSON/SSE 请求样本、HTTP 诊断、同应用会话对比、
+AI 接口实测字段和预览分享。日常 Direct / Rules / Global 代理与抓包相互独立。
 
-实际验收见 ACCEPTANCE-0.5.zh-CN.txt：最终63，同一公证ZIP，macOS26.6.2/27.2.1。
-macOS26.0本身、实体机、睡眠唤醒/漫游、完整UDP/DNS/DHCP重跑、长期压力、系统CA信任/撤销及外部模型推理仍属独立未验证范围。
+稳定性验收及其实际时长、构建和系统见 ACCEPTANCE-0.6.zh-CN.txt。
+短时虚拟机负载不能证明实体机、多日运行、休眠唤醒或 Wi-Fi 漫游稳定。
+
+本版不含断点暂停编辑、重放、Mock、E7、内置 AI、自动故障切换、Kill Switch，
+也没有新增 WireGuard/OpenVPN。仍是公开预览版，不承诺完整 IP 层 VPN 或防泄漏。
+最低 macOS 26，Apple silicon；重启后仍需手动 Connect。

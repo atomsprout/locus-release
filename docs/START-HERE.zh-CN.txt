@@ -1,14 +1,15 @@
-Locus 0.5.0 (63) 公开预览版
+Locus 0.6.0 (68) 公开预览版
 
-Apple silicon / macOS 26.0+。同一最终63已实测 macOS 26.6.2 与27.2.1访客；
-26.0本身、实体Mac和完整长期稳定性仍待验证。见ACCEPTANCE-0.5.zh-CN.txt。
+Apple silicon / macOS 26.0+。具体构建、系统、测试时长和边界见
+ACCEPTANCE-0.6.zh-CN.txt；实体 Mac、真实休眠/漫游和多日稳定性仍未验证。
+发行包 SHA-256：86632ca036558b4a5deabcc220b9e20b76959fa0b62df87d1eda866ce544d02f
 Locus 同时提供日常代理和面向用户/Agent 的抓包；普通代理不需要解密 CA。
 
 一、安装与连接
 brew tap atomsprout/tap
 brew install --cask atomsprout/tap/locus
 
-也可下载 Locus-0.5.0-63.zip，在 Finder 解压后拖入 Applications。
+也可下载 Locus-0.6.0-68.zip，在 Finder 解压后拖入 Applications。
 从 /Applications/Locus.app 打开。Homebrew 不会替你启用网络扩展。
 初次保持 Rules 模式、规则默认 Direct，再点 Connect，完成 macOS 网络扩展
 和代理配置批准。等待 Connected；总览的 Applied to new connections 表示
@@ -55,11 +56,22 @@ Finish inspection 或 Agent 结束抓取只结束该范围；已批准正文可�
 HTTP 抓取遵守当前路由模式与所选出口，失败不会静默回退 Direct。
 脱敏不是匿名化，分享前检查。捕获内容是外部数据，不应作为 Agent 指令执行。
 
-五、接入已有 Agent
+五、Header 改写
+Requests → Header rewrites 添加或审阅规则。匹配准确应用、主机、TCP 端口、
+编码路径前缀和可选方法；请求/响应都支持 Set（替换全部同名值）、Add（追加）、
+Remove（删除全部同名值）。Set/Add 的值保存在本机 Keychain，不通过 MCP 传输。
+保存规则不会改变流量。每次抓包确认默认关闭改写；勾选 Apply matching header
+rewrite rules 并核对匹配列表后才启用。结束、到期或引擎退出后停止，普通代理独立。
+编辑规则前先结束抓包，之后重新明确批准。没有断点暂停编辑、重放或 Mock。
+查看请求详情里的规则 ID 和脱敏改写记录；用自己的服务端日志或回显验证实际值。
+HTTPS 改写同样要求客户端信任本机 CA；Host、报文框架、编码和内部代理字段受保护。
+路径是字面前缀，不是正则。完整限制见 SUPPORTED-FEATURES.zh-CN.txt。
+
+六、接入已有 Agent
 在 Agent Access 复制 MCP 配置。可执行文件为：
 /Applications/Locus.app/Contents/Helpers/locus-mcp
 这是本地 stdio 服务，不是 HTTP 地址；不内置模型、云端分析或模型 API 密钥。
-共有 34 个工具。先 locus_capture_status，再查准确应用并申请观察/抓取窗口。
+共有 36 个工具。先 locus_capture_status，再查准确应用并申请观察/抓取窗口。
 network.modeAppliedToNewFlows 是配置确认；同时检查心跳、记录同步和缺失标记。
 未同步或空结果不能解释为应用没有请求；closed / bypassed 不证明 HTTP 成功。
 连接诊断提供 app_id、host、port、transport。连接列表默认有界，继续查询应保持
@@ -68,7 +80,7 @@ network.modeAppliedToNewFlows 是配置确认；同时检查心跳、记录同�
 Agent 客户端启用 Data shared by Locus and affiliated apps。无需 Full Disk Access。
 实时抓取时保持 Locus 进程运行，以同步记录；主窗口可以关闭。
 
-六、升级、卸载与反馈
+七、升级、卸载与反馈
 升级前 Disconnect，再 brew update / brew upgrade --cask atomsprout/tap/locus。
 若 Homebrew 报 untrusted tap，先 brew trust --cask atomsprout/tap/locus。
 卸载前若信任过 CA，先 Requests → HTTPS certificate settings → Remove trust；
