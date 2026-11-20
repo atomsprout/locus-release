@@ -1,15 +1,21 @@
-Locus 0.6.0 (68) 公开预览版
+Locus 1.0.0 (70) 正式版
 
-Apple silicon / macOS 26.0+。具体构建、系统、测试时长和边界见
-ACCEPTANCE-0.6.zh-CN.txt；实体 Mac、真实休眠/漫游和多日稳定性仍未验证。
-发行包 SHA-256：86632ca036558b4a5deabcc220b9e20b76959fa0b62df87d1eda866ce544d02f
+Apple silicon / macOS 26.0+。系统语言为简体中文时界面显示中文；下文沿用英文界面
+的按钮和页面名称。具体构建、系统、测试时长和边界见 ACCEPTANCE-1.0.zh-CN.txt；
+本版最终包只在 macOS 27.2.1 虚拟机验收，macOS 26、实体 Mac、真实休眠/漫游和
+多日稳定性未在本版验证。
+发行包 SHA-256：2b744b3a7651facac6e56454cbb4e5a241f3dc37f583c427b6c195ac434caa8b
 Locus 同时提供日常代理和面向用户/Agent 的抓包；普通代理不需要解密 CA。
 
 一、安装与连接
 brew tap atomsprout/tap
 brew install --cask atomsprout/tap/locus
 
-也可下载 Locus-0.6.0-68.zip，在 Finder 解压后拖入 Applications。
+也可下载 Locus-1.0.0-70.zip，在 Finder 解压后拖入 Applications。
+请用 Finder 拖放，不要用终端 mv：否则 macOS 会从临时位置运行这份下载，Connect 时
+Locus 会提示原因；退出后用 Finder 把 Locus 拖出再拖回 Applications 即可。
+首次 Connect 时 macOS 会要求在 系统设置 → 通用 → 登录项与扩展 → 网络扩展 中打开
+Locus 的开关，并输入管理员密码。
 从 /Applications/Locus.app 打开。Homebrew 不会替你启用网络扩展。
 初次保持 Rules 模式、规则默认 Direct，再点 Connect，完成 macOS 网络扩展
 和代理配置批准。等待 Connected；总览的 Applied to new connections 表示

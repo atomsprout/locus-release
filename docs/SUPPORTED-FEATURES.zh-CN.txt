@@ -1,4 +1,7 @@
-Locus 0.6.0 (68) 能力范围
+Locus 1.0.0 (70) 能力范围
+
+界面
+• English、简体中文，跟随系统语言。路由解释正文、节点协议名和 MCP 返回给 Agent 的文字为英文。
 
 日常代理
 • Network Extension 透明应用代理；Direct / Rules / Global 三种模式。
@@ -51,4 +54,4 @@ Agent
 当前不含：完整 IP VPN、WireGuard/OpenVPN、Kill Switch、防泄漏承诺、自动故障切换、
 QUIC/HTTP3 解密、gRPC 解码、WebSocket 帧调试、loopback 抓取、断点暂停编辑、
 重放、Mock、E7、内置 AI，以及上游自签名根证书/mTLS 身份配置。
-具体实测构建、系统和边界以 ACCEPTANCE-0.6.zh-CN.txt 为准。
+具体实测构建、系统和边界以 ACCEPTANCE-1.0.zh-CN.txt 为准。

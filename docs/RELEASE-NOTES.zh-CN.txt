@@ -1,31 +1,35 @@
-Locus 0.6.0 (68) — Header 改写与稳定性补验
+Locus 1.0.0 (70) — 首个正式版
 
-新增 Header 改写：Requests → Header rewrites。
-• 请求和响应 Header 均可 Set（替换全部值）、Add（追加一项）、Remove（删除全部值）。
-• 精确匹配应用签名 ID、主机、TCP 端口、编码后的路径前缀，以及可选 HTTP 方法。
-• 最多 32 条规则，按列表顺序执行。值保存在本机 Keychain；启动时通过匿名管道
-  交给引擎，不写入运行配置文件。改写记录保留规则 ID 和脱敏前后值数量。
-• 保存规则不改变流量。每次抓包确认默认关闭改写；明确勾选后，只对本次范围
-  生效。结束、停止、到期或引擎退出会停止改写。修改规则需先结束抓包，再开始新会话。
-• 禁止改写 Host、报文长度/分块、连接、编码、内部代理认证和 HTTP/2 伪头等字段。
-  本版不修改 URL、方法、正文或目的地。HTTPS 仍需客户端信任本地 CA。
-• 修复结束抓包时状态先于扩展撤销确认的问题；停止中不允许启动新抓包，
-  未确认撤销时明确提示，不提前宣称完成。
-• 启动配置通过后台管道写入，断开的子进程不会用 SIGPIPE 终止 GUI；
-  启动有超时和取消检查。结束后的部分记录准确显示 Incomplete。
-• 修复新增选项导致小屏确认按钮被遮挡的问题：表单可滚动，底部按钮固定可见。
+1.0 不新增协议或抓包能力，重点是让首次安装和日常使用更顺：
 
-Agent：36 个本地 MCP 工具，新增：
-locus_list_header_rewrites、locus_propose_header_rewrite。
-Agent 只提出匹配规则，不接收或提供替换值。用户在 GUI 审核、填写 Set/Add 的值，
-保存后，还需在抓包确认中明确启用。提案不会直接改流量。
+• 简体中文界面：系统语言为简体中文时，窗口、表单、状态与错误提示显示中文；
+  英文界面保持不变。路由解释正文、节点协议名和 MCP 返回给 Agent 的文字仍为英文。
+• 文案统一：按钮是 Connect / Disconnect，原先仍写 Start / Stop / Capture stopped 的
+  十几处提示已统一。侧栏不再显示 Public Preview。
+• 端口显示修正：Connections、Sessions、Header 规则和抓包确认里的端口不再带千位
+  分隔符（原先 19876 会显示成 19,876）。
+• 证书说明修正：Requests → HTTPS certificate settings 的说明和状态原先被截断成一行，
+  现在完整显示，并提示命令行客户端可只让自己信任证书文件（例如 curl --cacert）。
+• 抓包确认里的匹配改写规则列表加宽、加高，可完整核对并可选中复制。
+• 首次连接提示：等待 macOS 批准扩展时显示 Preparing the network extension…，
+  不再显示 Not running。
+• 安装位置提示：应用已在 Applications 但被 macOS 从临时位置运行（下载后用终端或
+  第三方解压工具移动时会出现）时，说明原因和用 Finder 重新拖放的处理办法。
+• 未抓过包时，连接或断开后 Requests 不再显示“抓包已停止”；扩展已连接时
+  Settings 的 Install Extension 显示为 Installed。
 
-沿用 0.5：应用发现、准备检查、JSON/SSE 请求样本、HTTP 诊断、同应用会话对比、
-AI 接口实测字段和预览分享。日常 Direct / Rules / Global 代理与抓包相互独立。
+沿用 0.6 的全部能力：Direct / Rules / Global 代理、按应用与域名分流、连接证据、
+HTTP(S) 抓包、请求/响应 Header Set / Add / Remove、诊断会话与对比、36 个本地 MCP 工具。
+抓包、正文读取和 Header 改写的授权边界不变：保存规则不改变流量，每次抓包默认不改写，
+Agent 只能提议，不能提交替换值或批准。
 
-稳定性验收及其实际时长、构建和系统见 ACCEPTANCE-0.6.zh-CN.txt。
-短时虚拟机负载不能证明实体机、多日运行、休眠唤醒或 Wi-Fi 漫游稳定。
+从 0.6 升级：先 Disconnect，再 brew upgrade；打开后手动 Connect，macOS 会自动换用
+新扩展，原有节点、规则、Header 规则及其 Keychain 值、已保存证据保留。
 
-本版不含断点暂停编辑、重放、Mock、E7、内置 AI、自动故障切换、Kill Switch，
-也没有新增 WireGuard/OpenVPN。仍是公开预览版，不承诺完整 IP 层 VPN 或防泄漏。
-最低 macOS 26，Apple silicon；重启后仍需手动 Connect。
+验收所用的构建、系统、项目和时长见 ACCEPTANCE-1.0.zh-CN.txt。
+本版只在 macOS 27.2.1 虚拟机上做了最终包验收；macOS 26 虚拟机、实体 Mac、
+真实休眠唤醒、Wi-Fi 漫游和多日运行没有在本版验证。
+
+仍不含：断点暂停编辑、重放、Mock、E7、内置 AI、自动故障切换、Kill Switch、
+WireGuard/OpenVPN、Clash YAML / VMess / VLESS 订阅、IP 段规则。不承诺完整 IP 层 VPN
+或防泄漏。最低 macOS 26，Apple silicon；重启后仍需手动 Connect。

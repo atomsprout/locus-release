@@ -1,8 +1,8 @@
-# Locus — Public Preview
+# Locus
 
 面向用户和 Agent 的 macOS 网络诊断与抓包工作台：**按应用抓取 HTTP(S)，让 Agent 依据请求响应排查问题，同时保留规则代理与连接证据。**
 
-公开预览版 **0.6.0 (68)**。要求 **Apple silicon / macOS 26 或更新版本**。
+首个正式版 **1.0.0 (70)**。要求 **Apple silicon / macOS 26 或更新版本**。系统语言为简体中文时界面显示中文。最终包在 macOS 27.2.1 虚拟机验收；macOS 26 虚拟机、实体 Mac、真实休眠唤醒与 Wi-Fi 漫游未在本版验证，详见[验收范围](docs/ACCEPTANCE-1.0.zh-CN.txt)。
 
 ## 安装或升级
 
@@ -20,12 +20,13 @@ brew tap atomsprout/tap
 brew install --cask atomsprout/tap/locus
 ```
 
-如 Homebrew 提示 `untrusted tap`，先运行 `brew trust --cask atomsprout/tap/locus`。也可[直接下载发行包](https://github.com/atomsprout/locus-release/releases/tag/v0.6.0-68)。从 `/Applications/Locus.app` 打开，先选择路由模式和节点，手动 Connect 并完成 macOS 网络扩展/代理配置授权。安装和重启不会自动开始抓取。
+如 Homebrew 提示 `untrusted tap`，先运行 `brew trust --cask atomsprout/tap/locus`。也可[直接下载发行包](https://github.com/atomsprout/locus-release/releases/tag/v1.0.0-70)。从 `/Applications/Locus.app` 打开，先选择路由模式和节点，手动 Connect 并完成 macOS 网络扩展（需管理员密码）和代理配置授权。直接下载时请用 Finder 把应用拖入 Applications。安装和重启不会自动开始抓取。
 
-## 0.6 可以做什么
+## 1.0 可以做什么
 
 | 能力 | 使用方式 |
 |---|---|
+| 简体中文界面 | 跟随系统语言；路由解释正文、协议名和 MCP 返回文字仍为英文。 |
 | Header 改写 | 请求/响应 Set、Add、Remove；匹配准确应用、主机、端口、路径前缀和可选方法。保存值使用 Keychain。 |
 | 按窗口启用 | 每次抓包默认不改写，明确勾选并核对匹配规则后才生效；结束、到期或引擎退出后停止。 |
 | 改写证据 | 查看规则 ID、动作和脱敏变化；通过自己的服务端日志或回显确认真正收到的内容。 |
@@ -71,7 +72,7 @@ Global 是符合范围流量的代理模式；仍遵守系统排除和本地网�
 
 当前没有断点暂停编辑、HTTP 重放、Mock、E7、自动故障切换或新 VPN 隧道协议。QUIC/HTTP3、gRPC、WebSocket 帧和 loopback 抓取不在本版范围内。`bypassed` / `closed` 不证明 HTTP 请求成功，Agent 结论必须核对证据。参见[已知限制](docs/KNOWN-ISSUES.zh-CN.txt)。
 
-发行包已签名、公证。最终 68 的 **macOS 26.6.2 (25G83)** / **27.2.1 (26B131)** 虚拟机验收、146 项核心测试、14 组签名 MCP 集成测试与实际测试时长见[0.6 验收说明](docs/ACCEPTANCE-0.6.zh-CN.txt)。这不代表实体机、真实休眠唤醒、Wi-Fi 漫游或多日稳定性认证。历史测试保留各自实际构建范围。
+发行包已签名、公证。最终 70 在 **macOS 27.2.1 (26B131)** 虚拟机验收，146 项核心测试、14 组签名 MCP 集成测试与实际测试项目和时长见[1.0 验收说明](docs/ACCEPTANCE-1.0.zh-CN.txt)。这不代表 macOS 26、实体机、休眠唤醒、Wi-Fi 漫游或多日运行已验证；macOS 26.6.2 虚拟机最近一次验收的是 0.6.0 (68)，见[0.6 验收说明](docs/ACCEPTANCE-0.6.zh-CN.txt)。
 
 卸载前：先 Disconnect；如果曾信任 Locus CA，进入 Requests → HTTPS certificate settings → Remove trust 完成移除，再到 Settings → Remove network integration。完成系统提示或重启后执行 `brew uninstall --cask atomsprout/tap/locus`。退出应用本身不会停止已运行的系统代理。
 
