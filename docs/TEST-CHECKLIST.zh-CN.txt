@@ -1,4 +1,4 @@
-Locus 1.0.0 (70) 首次体验与反馈
+Locus 1.0.1 (72) 首次体验与反馈
 
 安装与日常代理
 [ ] Apple silicon、macOS 26 或更新；从 /Applications 打开。
@@ -35,7 +35,7 @@ Agent 与分享
 [ ] 再 brew uninstall --cask atomsprout/tap/locus。不要手动删除系统扩展目录。
 
 反馈建议
-版本/构建：1.0.0 (70)
+版本/构建：1.0.1 (72)
 macOS 版本与芯片：
 路由模式、节点协议（不要发送密码/订阅地址）：
 是否开启抓包/Header 改写：

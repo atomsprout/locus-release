@@ -1,34 +1,35 @@
-Locus 1.0.0 (70) — 首个正式版
+Locus 1.0.1 (72) — 代理连接修复
 
-1.0 不新增协议或抓包能力，重点是让首次安装和日常使用更顺：
+1.0.1 修复 1.0.0 及更早版本里代理连接的收尾问题，建议所有用户升级。
 
-• 简体中文界面：系统语言为简体中文时，窗口、表单、状态与错误提示显示中文；
-  英文界面保持不变。路由解释正文、节点协议名和 MCP 返回给 Agent 的文字仍为英文。
-• 文案统一：按钮是 Connect / Disconnect，原先仍写 Start / Stop / Capture stopped 的
-  十几处提示已统一。侧栏不再显示 Public Preview。
-• 端口显示修正：Connections、Sessions、Header 规则和抓包确认里的端口不再带千位
-  分隔符（原先 19876 会显示成 19,876）。
-• 证书说明修正：Requests → HTTPS certificate settings 的说明和状态原先被截断成一行，
-  现在完整显示，并提示命令行客户端可只让自己信任证书文件（例如 curl --cacert）。
-• 抓包确认里的匹配改写规则列表加宽、加高，可完整核对并可选中复制。
-• 首次连接提示：等待 macOS 批准扩展时显示 Preparing the network extension…，
-  不再显示 Not running。
-• 安装位置提示：应用已在 Applications 但被 macOS 从临时位置运行（下载后用终端或
-  第三方解压工具移动时会出现）时，说明原因和用 Finder 重新拖放的处理办法。
-• 未抓过包时，连接或断开后 Requests 不再显示“抓包已停止”；扩展已连接时
-  Settings 的 Install Extension 显示为 Installed。
+• 修复内存持续增长：经代理的连接在服务端先关闭、且最后一段数据与关闭信号同时到达时，
+  转发任务不会结束，上游连接和缓冲一直留在网络扩展里。短请求（例如带
+  Connection: close 的 HTTP 接口）有一半以上会遇到，持续使用时扩展内存每个连接增长
+  数十 KiB。修复后同样流量下扩展内存保持平稳。直连模式不受影响。
+• 修复误报失败：同一情况下另一部分连接被记录为 failed（No message available on STREAM），
+  虽然响应其实完整。现在记录为 closed。
+• 这些连接原先只有 opened 记录、没有 closed 记录；现在每个代理连接都会有终态记录，
+  流量字节数和耗时可用。
+• 一侧结束后另一侧长时间无数据也不关闭的连接，现在有上限：服务端关闭后本地应用
+  10 秒内既不发送也不关闭，或本地应用结束发送后服务端 5 分钟无数据，连接会被收尾并
+  在记录里说明原因。
+• 记录同步更省资源：网络扩展响应界面每两秒一次的记录同步时，不再把整份连接日志
+  （最多两个 8 MiB 文件）全部读入并解码，只解码要返回的那一页。
 
-沿用 0.6 的全部能力：Direct / Rules / Global 代理、按应用与域名分流、连接证据、
-HTTP(S) 抓包、请求/响应 Header Set / Add / Remove、诊断会话与对比、36 个本地 MCP 工具。
-抓包、正文读取和 Header 改写的授权边界不变：保存规则不改变流量，每次抓包默认不改写，
-Agent 只能提议，不能提交替换值或批准。
+沿用 1.0.0 的界面改进：简体中文界面、Connect / Disconnect 文案统一、端口显示修正、
+证书说明与抓包确认页显示修正、首次连接与安装位置提示。能力和授权边界与 0.6 相同：
+规则代理、按应用分流、连接证据、HTTP(S) 抓包、Header Set / Add / Remove、36 个本地
+MCP 工具。
 
-从 0.6 升级：先 Disconnect，再 brew upgrade；打开后手动 Connect，macOS 会自动换用
-新扩展，原有节点、规则、Header 规则及其 Keychain 值、已保存证据保留。
+已知限制（非本版引入）：客户端先关闭自己的发送方向再等待响应（半关闭）时，macOS 会
+直接结束被代理的连接，响应收不到。常见的浏览器、curl 和 HTTP 客户端库不这样做。
 
-验收所用的构建、系统、项目和时长见 ACCEPTANCE-1.0.zh-CN.txt。
-本版只在 macOS 27.2.1 虚拟机上做了最终包验收；macOS 26 虚拟机、实体 Mac、
-真实休眠唤醒、Wi-Fi 漫游和多日运行没有在本版验证。
+从 1.0.0 或 0.6 升级：先 Disconnect，再 brew upgrade；打开后手动 Connect，macOS 会自动
+换用新扩展，节点、规则、Header 规则及其 Keychain 值、已保存证据保留。
+
+验收所用的构建、系统、项目和时长见 ACCEPTANCE-1.0.zh-CN.txt。本版只在 macOS 27.2.1
+虚拟机上做了最终包验收；macOS 26 虚拟机、实体 Mac、真实休眠唤醒、Wi-Fi 漫游和多日运行
+没有在本版验证。
 
 仍不含：断点暂停编辑、重放、Mock、E7、内置 AI、自动故障切换、Kill Switch、
 WireGuard/OpenVPN、Clash YAML / VMess / VLESS 订阅、IP 段规则。不承诺完整 IP 层 VPN
